@@ -3,7 +3,7 @@
 //  quickLookFile
 //
 //  Copyright (c) 2013 Mark van den Bergh
-//  
+//
 //  You may use this code under the terms of the MIT License.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,32 +29,31 @@
 
 @implementation CDVQuickLookPlugin
 
-- (void) quickLookFile:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
+- (void)quickLookFile:(CDVInvokedUrlCommand*)command
 {
-    NSString *callbackID = [arguments pop];
-    NSString *path = [arguments objectAtIndex:0];     
-    
+    //NSString *callbackID = [arguments pop];
+    NSString *path = [command.arguments objectAtIndex:0];
     // determine UTI from file extension
-    NSString *extension = [[arguments objectAtIndex:0] pathExtension];
-    NSString *uti = (NSString *) UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)extension, NULL);
-    
+    NSString *extension = [[command.arguments objectAtIndex:0] pathExtension];
+    NSString *uti = (__bridge NSString *) UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
+
     path = [path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
+//
     NSURL *fileURL = [NSURL URLWithString:path];
     UIDocumentInteractionController *controller = [UIDocumentInteractionController interactionControllerWithURL:fileURL];
-    
+//
     controller.delegate = self;
     controller.UTI = uti;
-    
+//
     BOOL menuOpenened = [controller presentPreviewAnimated:YES];
-    
+//
     CDVPluginResult* pluginResult;
     if (!menuOpenened) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @""];
-        [self writeJavascript: [pluginResult toErrorCallbackString:callbackID]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @""];
-        [self writeJavascript: [pluginResult toSuccessCallbackString:callbackID]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
 }
 

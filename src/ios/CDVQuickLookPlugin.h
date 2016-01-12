@@ -30,6 +30,6 @@
     NSString *localFile;
 }
 
-- (void) quickLookFile:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
+- (void)quickLookFile:(CDVInvokedUrlCommand*)command;
 
 @end

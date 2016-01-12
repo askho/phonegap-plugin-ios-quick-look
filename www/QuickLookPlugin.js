@@ -2,7 +2,7 @@
    QuickLookPlugin.js
 
    Copyright (c) 2013 Mark van den Bergh
-   
+
    You may use this code under the terms of the MIT License.
 
    Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,11 +22,11 @@
    IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
    CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
-window.QuickLookPlugin = {
-    
-    openWith: function ( path, success, fail) {
-        return cordova.exec(success, fail, "QuickLookPlugin", "quickLookFile", [path]);
-    }
-
-};
+var QuickLook = {
+  openWith: function( path, success, fail) {
+      return cordova.exec(success, fail, "QuickLookPlugin", "quickLookFile", [path]);
+  }
+}
+if (module) {
+  module.exports = QuickLook;
+}
